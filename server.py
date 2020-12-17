@@ -3,6 +3,14 @@ import threading
 import pickle
 from users import Users
 
+#color codes
+OKBLUE = '\033[94m'
+OKYELLOW = '\033[93m'
+OKGREEN = '\033[92m'
+OKRED = '\033[91m'
+BOLD = '\033[1m'
+ENDC = '\033[0m'
+
 HEADER = 64
 PORT = 8760
 SERVER = '192.168.208.9'
@@ -46,7 +54,7 @@ def broadcast_msg(message, connection):
 				remove_client(client)
 
 def incoming_clients(conn, addr):
-	print (f"New connection established for {addr}")
+	print (OKGREEN+f"New connection established for {addr}"+ENDC)
 	connected = True
 	while connected:
 		msg_length = conn.recv(HEADER).decode(FORMAT)
@@ -74,22 +82,21 @@ def incoming_clients(conn, addr):
 			else:
 				print (f"{addr} sent: {msg}")		
 				conn.send("MESSAGE RECEIVED BY THE SERVER\n".encode(FORMAT))
-				if msg == "#DISCONNECT":
+				if msg == OKRED+"#DISCONNECT"+ENDC:
 					connected = False
-				message = "<"+username+">:"+msg
+				message = "<"+OKYELLOW+username+ENDC+">: "+msg
 				broadcast_msg(message, conn)
 	conn.close()
 		
 def main():
 	server.listen()
-	print (f'Server has started listening for clients on {SERVER}...')
+	print (OKGREEN+f'Server has started listening for clients on {SERVER}...'+ENDC)
 	while True:
 		conn, addr = server.accept()
 		thread = threading.Thread(target=incoming_clients,args=(conn, addr))
 		client_list.append(conn)
 		thread.start()
-		print (f'No of Clients that are connected: {threading.activeCount() -1}')
+		print (OKGREEN+f'No of Clients that are connected: {threading.activeCount() -1}'+ENDC)
 	server.close()
-
-print ("Server Program has started...")
+print (OKGREEN+"Server Program has started..."+ENDC)
 main()
