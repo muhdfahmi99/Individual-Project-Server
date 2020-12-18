@@ -80,14 +80,14 @@ def incoming_clients(conn, addr):
 					else:
 						conn.send("False".encode(FORMAT))
 			else:
-				print (f"{addr} sent: {msg}")		
+				print (f"{addr} sent: {msg}")
 				conn.send("MESSAGE RECEIVED BY THE SERVER\n".encode(FORMAT))
 				if msg == OKRED+"#DISCONNECT"+ENDC:
 					connected = False
 				message = "<"+OKYELLOW+username+ENDC+">: "+msg
 				broadcast_msg(message, conn)
 	conn.close()
-		
+
 def main():
 	server.listen()
 	print (OKGREEN+f'Server has started listening for clients on {SERVER}...'+ENDC)
